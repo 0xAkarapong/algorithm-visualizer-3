@@ -10,6 +10,7 @@
       "tailwindcss/": "npm:/tailwindcss@3.3.3/",
       "tailwindcss/plugin": "npm:/tailwindcss@3.3.3/plugin.js",
       "chart.js": "https://esm.sh/chart.js@4.4.0",
-      "mathjs": "https://esm.sh/mathjs@12.0.0"
+      "mathjs": "https://esm.sh/mathjs@12.0.0",
+      "d3": "https://esm.sh/d3@7"
     }
   }

@@ -4,6 +4,10 @@
 
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
+import * as $api_algorithms_algorithm_ from "./routes/api/algorithms/[algorithm].ts";
+import * as $api_algorithms_graph from "./routes/api/algorithms/graph.ts";
+import * as $api_algorithms_searching from "./routes/api/algorithms/searching.ts";
+import * as $api_algorithms_sorting from "./routes/api/algorithms/sorting.ts";
 import * as $api_joke from "./routes/api/joke.ts";
 import * as $greet_name_ from "./routes/greet/[name].tsx";
 import * as $index from "./routes/index.tsx";
@@ -14,6 +18,10 @@ const manifest = {
   routes: {
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
+    "./routes/api/algorithms/[algorithm].ts": $api_algorithms_algorithm_,
+    "./routes/api/algorithms/graph.ts": $api_algorithms_graph,
+    "./routes/api/algorithms/searching.ts": $api_algorithms_searching,
+    "./routes/api/algorithms/sorting.ts": $api_algorithms_sorting,
     "./routes/api/joke.ts": $api_joke,
     "./routes/greet/[name].tsx": $greet_name_,
     "./routes/index.tsx": $index,
