@@ -1,21 +1,31 @@
-import { useState } from "preact/hooks";
+// components/AlgorithmSelector.tsx
+import { useState, useEffect } from "preact/hooks";
 
+interface Props {
+    onAlgorithmSelect: (algorithmName: string, algorithmCategory: string) => void;
+}
 const algorithms = [
-  { name: "Bubble Sort", category: "sorting" },
-  { name: "Insertion Sort", category: "sorting" },
-  { name: "Merge Sort", category: "sorting" },
-  { name: "Binary Search", category: "searching" },
-  { name: "Depth-First Search", category: "graph" },
-  { name: "Breadth-First Search", category: "graph" },
-  { name: "Dijkstra's Algorithm", category: "graph" },
+  { name: "bubbleSort", category: "sorting" },  // Lowercase names
+  { name: "insertionSort", category: "sorting" }, // Lowercase names
+  { name: "mergeSort", category: "sorting" },    // Lowercase names
+  { name: "binarySearch", category: "searching" }, // Lowercase names
+  { name: "depthFirstSearch", category: "graph" }, // Lowercase names
+  { name: "breadthFirstSearch", category: "graph" }, // Lowercase names
+  { name: "dijkstra", category: "graph" },   // Lowercase names
 ];
 
-interface AlgorithmSelectorProps {
-  onAlgorithmSelect: (alg: string, cat: string) => void;
-}
-
-export default function AlgorithmSelector({ onAlgorithmSelect }: AlgorithmSelectorProps) {
+export default function AlgorithmSelector({onAlgorithmSelect}: Props) {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
+
+    useEffect(() => {
+        if(selectedAlgorithm){
+            const algo = algorithms.find(a => a.name === selectedAlgorithm)
+            if(algo){
+                 onAlgorithmSelect(algo.name, algo.category)
+            }
+        }
+    }, [selectedAlgorithm, onAlgorithmSelect])
+
 
   return (
     <div class="mb-4">
@@ -31,7 +41,8 @@ export default function AlgorithmSelector({ onAlgorithmSelect }: AlgorithmSelect
         <option value="">-- Select an Algorithm --</option>
         {algorithms.map((algorithm) => (
           <option key={algorithm.name} value={algorithm.name}>
-            {algorithm.name}
+            {/* Display the user-friendly name, but use lowercase for the value */}
+            {algorithm.name.charAt(0).toUpperCase() + algorithm.name.slice(1).replace(/([A-Z])/g, ' $1').trim()}
           </option>
         ))}
       </select>
