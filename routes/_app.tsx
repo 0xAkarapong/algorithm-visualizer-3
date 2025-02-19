@@ -1,35 +1,18 @@
-import { Head } from "$fresh/runtime.ts";
-import { AppProps } from "$fresh/src/server/types.ts";
+// routes/_app.tsx
+import { AppProps } from "$fresh/server.ts";
 
-export default function App(props: AppProps) {
-  const { Component } = props;
-
+export default function App({ Component }: AppProps) {
   return (
     <html>
-      <Head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Fresh project | starter code</title>
-        <link rel="icon" type="image/png" href="../favicon.ico" />
-        <link rel="stylesheet" href="../styles/tailwind.css" />
-      </Head>
-      <body class="antialiased">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Algorithm Visualizer</title>
+        <link rel="stylesheet" href="/styles.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+      </head>
+      <body>
         <Component />
-        <script>
-          {`
-            // Restore scroll position on load.
-            window.addEventListener("load", () => {
-              const scrollY = localStorage.getItem("scrollY");
-              if (scrollY) {
-                window.scrollTo(0, parseInt(scrollY, 10));
-              }
-            });
-            // Save scroll position on scroll.
-            window.addEventListener("scroll", () => {
-              localStorage.setItem("scrollY", window.scrollY.toString());
-            });
-          `}
-        </script>
       </body>
     </html>
   );
