@@ -110,18 +110,21 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
         <div class="mb-4">
             <div class="flex space-x-4 mb-2">
                 <button
+                    type="button"
                     class={`px-4 py-2 rounded ${inputType === "random" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setInputType("random")}
                 >
                     Random Data
                 </button>
                 <button
+                    type="button"
                     class={`px-4 py-2 rounded ${inputType === "manual" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
                     onClick={() => setInputType("manual")}
                 >
                     Manual Input
                 </button>
                 <button
+            type="button"
           class={`px-4 py-2 rounded ${inputType === "predefined" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
           onClick={() => setInputType("predefined")}
         >
@@ -138,21 +141,21 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                                 type="number"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 value={arraySize}
-                                onChange={(e) => setArraySize(Math.max(1, parseInt(e.target.value, 10)))}
+                                onChange={(e) => setArraySize(Math.max(1, parseInt((e.target as HTMLInputElement).value, 10)))}
                             />
                             <label class="block text-sm font-medium text-gray-700">Min Value:</label>
                             <input
                                 type="number"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 value={minValue}
-                                 onChange={(e) => setMinValue(parseInt(e.target.value, 10))}
+                                 onChange={(e) => setMinValue(parseInt((e.target as HTMLInputElement).value, 10))}
                             />
                             <label class="block text-sm font-medium text-gray-700">Max Value:</label>
                             <input
                                 type="number"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 value={maxValue}
-                                onChange={(e) => setMaxValue(parseInt(e.target.value, 10))}
+                                onChange={(e) => setMaxValue(parseInt((e.target as HTMLInputElement).value, 10))}
                             />
 
                         </>
@@ -164,7 +167,7 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                                 type="number"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 value={numNodes}
-                                onChange={(e) => setNumNodes(Math.max(1, parseInt(e.target.value, 10)))}
+                                onChange={(e) => setNumNodes(Math.max(1, parseInt((e.target as HTMLInputElement).value, 10)))}
                             />
                             <label class="block text-sm font-medium text-gray-700">Edge Probability:</label>
                             <input
@@ -174,7 +177,11 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                                 max="1"
                                 class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 value={edgeProbability}
-                                onChange={(e) => setEdgeProbability(parseFloat(e.target.value))}
+                                onChange={(e) => {
+                                    if (e.target) {
+                                        setEdgeProbability(parseFloat((e.target as HTMLInputElement).value));
+                                    }
+                                }}
                             />
                         </>
                     )}
@@ -189,7 +196,7 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                             <textarea
                             class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             value={manualInput}
-                            onChange={(e) => setManualInput(e.target.value)}
+                            onChange={(e) => setManualInput((e.target as HTMLTextAreaElement).value)}
                             />
                         </>
                     )}
@@ -199,7 +206,7 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                             <textarea
                             class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             value={manualInput}
-                            onChange={(e) => setManualInput(e.target.value)}
+                            onChange={(e) => setManualInput((e.target as HTMLTextAreaElement).value)}
                             placeholder={`[\n  { "value": 0, "neighbors": [1, 2] },\n  { "value": 1, "neighbors": [0, 3] }\n]`}
                             />
                         </>
@@ -213,9 +220,9 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
           <>
             <label class="block text-sm font-medium text-gray-700">Select a Dataset:</label>
             <select
-              class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               value={selectedDataset}
-              onChange={(e) => setSelectedDataset(e.target.value)}
+              onChange={(e) => setSelectedDataset((e.target as HTMLSelectElement).value)}
             >
               <option value="">-- Select a Dataset --</option>
               <option value="sortedArray">Sorted Array</option>
@@ -230,7 +237,7 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
             <select
               class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               value={selectedDataset}
-              onChange={(e) => setSelectedDataset(e.target.value)}
+              onChange={(e) => setSelectedDataset((e.target as HTMLSelectElement).value)}
             >
               <option value="">-- Select a Dataset --</option>
               <option value="sampleGraph">Sample Graph</option>
@@ -246,7 +253,7 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                         type="number"
                         className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         value={targetValue}
-                        onChange={(e) => setTargetValue(parseInt(e.target.value, 10))}
+                        onChange={(e) => setTargetValue(parseInt((e.target as HTMLInputElement).value, 10))}
                     />
                 </>
 
@@ -259,12 +266,13 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                         type="number"
                         className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         value={startNode}
-                        onChange={(e) => setStartNode(parseInt(e.target.value, 10))}
+                        onChange={(e) => setStartNode(parseInt((e.target as HTMLInputElement).value, 10))}
                     />
                 </>
             )}
 
             <button
+                type="button"
                 class="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                 onClick={handleGenerateData}
             >
