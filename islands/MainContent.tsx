@@ -1,5 +1,5 @@
 // components/MainContent.tsx
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useRef } from "preact/hooks";
 import AlgorithmSelector from "../components/AlgorithmSelector.tsx";
 import DataInput from "../components/DataInput.tsx";
 import Visualizer from "../components/Visualizer.tsx";
@@ -19,13 +19,27 @@ export default function MainContent() {
   const [targetValue, setTargetValue] = useState<number | undefined>(undefined);
   const [startNode, setStartNode] = useState<number | undefined>(undefined);
   const [highlightedInfo, setHighlightedInfo] = useState({});
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  // Store the current scroll position when scrolling.
+  const handleScroll = (e: Event) => {
+    const target = e.target as HTMLDivElement;
+    setScrollPosition(target.scrollTop);
+  };
+
+  // Restore scroll position after each update.
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollPosition;
+    }
+  });
 
   // Fetch and set steps when the algorithm or data changes
   useEffect(() => {
     if (selectedAlgorithm && data.length > 0) {
       const fetchData = async () => {
         let url = `/api/algorithms/${selectedAlgorithm}`;
-        // if you had separate endpoints:
         if (algorithmCategory === "sorting") {
           url = `/api/algorithms/sorting`;
         } else if (algorithmCategory === "searching") {
@@ -36,22 +50,17 @@ export default function MainContent() {
         try {
           const response = await fetch(url, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              data: data,
-              algorithm: selectedAlgorithm, // Send the algorithm name
+              data,
+              algorithm: selectedAlgorithm,
               target: targetValue,
               startNode: startNode,
             }),
           });
-
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(
-              `Error fetching algorithm steps: ${response.status} - ${errorData.error}`,
-            );
+            throw new Error(`Error fetching algorithm steps: ${response.status} - ${errorData.error}`);
           }
           const result = await response.json();
           setSteps(result);
@@ -59,7 +68,7 @@ export default function MainContent() {
           setIsRunning(false);
         } catch (error: any) {
           console.error("Error fetching data:", error);
-          alert(error.message); //show error to user
+          alert(error.message);
         }
       };
       fetchData();
@@ -81,9 +90,8 @@ export default function MainContent() {
 
   useEffect(() => {
     if (steps.length > 0) {
-      //Update HighlightInfo
       const currentStepData = steps[currentStep];
-      const { state, ...otherInfo } = currentStepData; //remove state key.
+      const { state, ...otherInfo } = currentStepData;
       setHighlightedInfo(otherInfo);
     }
   }, [currentStep, steps]);
@@ -115,21 +123,24 @@ export default function MainContent() {
       setCurrentStep((prevStep) => prevStep + 1);
     }
   };
+
   const handleSpeedChange = (newSpeed: number) => {
     setSpeed(newSpeed);
   };
+
   return (
-    <>
+    <div
+      ref={scrollContainerRef}
+      style={{ height: "100vh", overflowY: "auto" }}
+      onScroll={handleScroll}
+    >
       <AlgorithmSelector
         onAlgorithmSelect={(alg, cat) => {
           setSelectedAlgorithm(alg);
           setAlgorithmCategory(cat);
         }}
       />
-      <DataInput
-        selectedAlgorithm={selectedAlgorithm}
-        onDataChange={handleDataChange}
-      />
+      <DataInput selectedAlgorithm={selectedAlgorithm} onDataChange={handleDataChange} />
       <AlgorithmControls
         onStart={handleStart}
         onStop={handleStop}
@@ -144,6 +155,6 @@ export default function MainContent() {
         steps={steps}
         currentStep={currentStep}
       />
-    </>
+    </div>
   );
 }
