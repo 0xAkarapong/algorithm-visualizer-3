@@ -1,4 +1,3 @@
-// components/Visualizer.tsx
 import { useEffect, useRef, useState } from "preact/hooks";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
@@ -31,9 +30,17 @@ export default function Visualizer({ data, algorithmCategory, steps, currentStep
         console.error("Sorting: currentStepData or its state is undefined");
         return;
       }
-      // Expecting the state to be an array of numbers
+      // Expect the state to be an array of numbers
       const chartData = currentStepData.state;
       const labels = chartData.map((_, idx: number) => idx.toString());
+
+      // Assume the step provides swappedIndices indicating the elements being swapped
+      const swappedIndices = currentStepData.swappedIndices || [];
+      const backgroundColors = chartData.map((value: number, idx: number) => {
+        // Highlight the swapped elements (e.g., with red), normal ones use a standard color.
+        if (swappedIndices.includes(idx)) return "red";
+        return "rgba(75, 192, 192, 0.4)";
+      });
 
       if ((window as any).sortChartInstance) {
         (window as any).sortChartInstance.destroy();
@@ -47,15 +54,18 @@ export default function Visualizer({ data, algorithmCategory, steps, currentStep
             {
               label: "Data",
               data: chartData,
-              backgroundColor: "rgba(75, 192, 192, 0.4)",
+              backgroundColor: backgroundColors,
               borderColor: "rgba(75, 192, 192, 1)",
               borderWidth: 1,
             },
           ],
         },
         options: {
-          animation: false,
-          scales: { y: { beginAtZero: true } },
+          animation: false,  // Disable built-in animation so updates happen instantly.
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true },
+          },
         },
       });
     }

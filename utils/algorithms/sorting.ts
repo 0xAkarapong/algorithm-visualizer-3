@@ -1,26 +1,27 @@
 // utils/algorithms/sorting.ts
 
-export function bubbleSort(arr: number[]): { state: number[]; comparisons: number; swaps: number }[] {
-    const steps = [];
-    const n = arr.length;
-    let comparisons = 0;
-    let swaps = 0;
+export function bubbleSort(arr: number[]): { state: number[]; swappedIndices?: [number, number] }[] {
+  const steps: { state: number[]; swappedIndices?: [number, number] }[] = [];
+  const array = [...arr];
+  let n = array.length;
+  let swapped: boolean;
 
+  do {
+    swapped = false;
     for (let i = 0; i < n - 1; i++) {
-        for (let j = 0; j < n - i - 1; j++) {
-            comparisons++;
-            steps.push({ state: [...arr], comparisons, swaps }); // Capture state before comparison
-            if (arr[j] > arr[j + 1]) {
-                // Swap
-                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-                swaps++;
-                steps.push({ state: [...arr], comparisons, swaps }); // Capture state after swap
-            }
-        }
+      if (array[i] > array[i + 1]) {
+        [array[i], array[i + 1]] = [array[i + 1], array[i]];
+        swapped = true;
+        steps.push({ state: [...array], swappedIndices: [i, i + 1] });
+      }
     }
-     steps.push({ state: [...arr], comparisons, swaps });
-    return steps;
+    n--;
+  } while (swapped);
+
+  steps.push({ state: [...array] }); // Final state
+  return steps;
 }
+
 export function insertionSort(arr: number[]): { state: number[]; comparisons: number; swaps: number }[] {
   const steps = [];
   const n = arr.length;
