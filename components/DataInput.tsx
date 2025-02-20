@@ -40,11 +40,19 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
         if (inputType === "random") {
             if (algorithmCategory === "sorting" || algorithmCategory === "searching") {
                 data = generateRandomArray(arraySize, minValue, maxValue);
+                if (algorithmCategory === "searching") {
+                    data = (data as number[]).sort((a, b) => a - b);
+                }
             } else if (algorithmCategory === "graph") {
-                 data = generateRandomGraph(numNodes, edgeProbability);
+                data = generateRandomGraph(numNodes, edgeProbability);
             }
-            console.log("Data:", data); //add this line before onDataChange
-            onDataChange(data, algorithmCategory, algorithmCategory === "searching" ? targetValue: undefined, algorithmCategory === 'graph' ? startNode: undefined);
+            console.log("Data:", data);
+            onDataChange(
+                data,
+                algorithmCategory,
+                algorithmCategory === "searching" ? targetValue : undefined,
+                algorithmCategory === "graph" ? startNode : undefined
+            );
 
         } else if (inputType === "manual") {
 
@@ -183,6 +191,13 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                                     }
                                 }}
                             />
+                            <label className="block text-sm font-medium text-gray-700">Start Node:</label>
+                            <input
+                                type="number"
+                                className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                value={startNode}
+                                onChange={(e) => setStartNode(parseInt((e.target as HTMLInputElement).value, 10))}
+                            />
                         </>
                     )}
                 </div>
@@ -198,6 +213,28 @@ export default function DataInput({ onDataChange, selectedAlgorithm }: Props) {
                             value={manualInput}
                             onChange={(e) => setManualInput((e.target as HTMLTextAreaElement).value)}
                             />
+                            {selectedAlgorithm.includes("Search") && (
+                              <>
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Enter target value:
+                                </label>
+                                <input
+                                  type="number"
+                                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                  value={targetValue}
+                                  onChange={(e) =>
+                                    onDataChange(
+                                      manualInput
+                                        .split(",")
+                                        .map((n) => parseInt(n.trim(), 10))
+                                        .sort((a, b) => a - b),
+                                      selectedAlgorithm.includes("Graph") ? "graph" : "searching",
+                                      parseInt((e.target as HTMLInputElement).value, 10)
+                                    )
+                                  }
+                                />
+                              </>
+                            )}
                         </>
                     )}
                     {selectedAlgorithm.includes("Graph") &&(
