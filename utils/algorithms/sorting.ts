@@ -55,19 +55,19 @@ export function mergeSort(arr: number[]): { state: number[]; comparisons: number
 
     function merge(arr: number[], l: number, m: number, r: number)
     {
-        var n1 = m - l + 1;
-        var n2 = r - m;
-        var L = new Array(n1);
-        var R = new Array(n2);
+        const n1 = m - l + 1;
+        const n2 = r - m;
+        const L = new Array(n1);
+        const R = new Array(n2);
 
-        for (var i = 0; i < n1; i++)
+        for (let i = 0; i < n1; i++)
             L[i] = arr[l + i];
-        for (var j = 0; j < n2; j++)
+        for (let j = 0; j < n2; j++)
             R[j] = arr[m + 1 + j];
 
-        var i = 0;
-        var j = 0;
-        var k = l;
+        let i = 0;
+        let j = 0;
+        let k = l;
 
         while (i < n1 && j < n2) {
             comparisons++;
@@ -100,7 +100,7 @@ export function mergeSort(arr: number[]): { state: number[]; comparisons: number
     if(l>=r){
         return;
     }
-    var m =l+ Math.floor((r-l)/2);
+    const m =l+ Math.floor((r-l)/2);
     mergeSortInternal(arr,l,m);
     mergeSortInternal(arr,m+1,r);
     merge(arr,l,m,r);
