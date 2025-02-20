@@ -45,7 +45,7 @@ export default function Visualizer({ data, algorithmCategory, steps, currentStep
           labels,
           datasets: [
             {
-              label: "Sorted Data",
+              label: "Data",
               data: chartData,
               backgroundColor: "rgba(75, 192, 192, 0.4)",
               borderColor: "rgba(75, 192, 192, 1)",
